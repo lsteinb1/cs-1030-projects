@@ -1,6 +1,19 @@
+# I copied over takeInt from when I wrote it in project2_lab, with several changes. I copied it instead of referencing the other file so it's easier for you to check it in this assignment
+def takeInt(inputPrompt, checkWord = None):
+    inputInt = 0 # initializing variable to return
+    try:
+        inputInt = int(input(inputPrompt)) # prints 'inputPrompt' as the prompt for the input
+    except:
+        if inputInt == checkWord:
+            return inputInt
+        else:
+            print("This input can't be converted to an integer. Please try again.")
+            takeInt(inputPrompt) # runs again until a valid input is given
+    return inputInt
+
 def count():
-    print("Counting numbers from 1 to 12.")
-    for i in range(1, 13):
+    print("Counting numbers from 1 to 12.") # explaining the task about to be done, for the purpose of this assignment
+    for i in range(1, 13): # stops at 13, doesn't print it (but you knew that)
         print(i)
         i += 1
 
@@ -19,44 +32,49 @@ def evens():
     even_num = 0
     for i in range(0, 31, 2):
         even_num = i
-        print(even_num, end = " ")
+        if i != 30: # if it's the starting number or any of the numbers in between the start and end, end with space, no newline (also added a comma at each end for aesthetic purposes)
+            print(even_num, end = ", ")
+        else: # if it's the last one, we'll want to at least end with a newline, so the next task doesn't display on the same line
+            print("and", even_num, end = ".\n")
 
 def mult_table():
-    k = int(input("Input an integer: "))
+    k = takeInt("Input an integer: ") # input validation, converts to an int if possible
     i = 0
     for i in range(1, 11):
         print(f"{k} × {i} = ", k * i)
 
 def n_numbers():
     n = 1
-    try:
-        n = int(input("How many numbers would you like to enter?: "))
-    except:
-        pass
-    i = 0
-    numbers = []
-    num_sum = 0
-    num_avg = 0
+    n = takeInt("How many numbers would you like to enter?: ") # input validation
+    i = 0 # initializing for future for loop
+    input_numbers = [] # for storing the entered numbers
+    num_sum = 0 # for storing the sum of the entered numbers
+    num_avg = 0 # for storing the average of the entered numbers
     for i in range(n):
-        num = int(input("Input an integer: "))
-        numbers.append(num)
+        num = takeInt("Input an integer: ") # input validation
+        input_numbers.append(num)
         num_sum += num
-    i = 0
+    i = 0 # resetting count
     print("Entered numbers:", end = " ")
     for i in range(n):
-        if i != n:
-            print(numbers[i], end = ", ")
-        else:
-            print(numbers[i], end = ".")
-    num_avg = (num_sum / n)
+        if i != n - 1: # if it isn't the last number
+            print(input_numbers[i], end = ", ")
+        else: # if it is the last number
+            print(input_numbers[i], end = ". ")
+    num_avg = (num_sum / n) # the sum divided by the number of integers entered
     print(f"Sum: {num_sum}, Average: {num_avg}")
+
+def min_max():
+    print("Taking input integers until user enters 'done', then printing the highest and lowest integers entered.")
+    n = takeInt("")
 
 
 def main():
-    count()
+    ''' count()
     add()
     evens()
     mult_table()
-    n_numbers()
+    n_numbers()'''
+    min_max()
 
 main()
