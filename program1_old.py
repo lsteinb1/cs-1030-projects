@@ -1,3 +1,5 @@
+# old version for working when I didn't have access to the original; now combined into Steinberg_Lydia_loops.py
+
 def evens():
     i = 0
     even_num = 0
