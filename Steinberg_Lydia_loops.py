@@ -1,19 +1,35 @@
 # I copied over takeInt from when I wrote it in project2_lab, with several changes. I copied it instead of referencing the other file so it's easier for you to check it in this assignment
-def takeInt(inputPrompt, checkWord = None):
-    inputInt = 0 # initializing variable to return
+def takeInt(inputPrompt, checkWord = False):
+    inputInt = input(inputPrompt) # prints 'inputPrompt' as the prompt for the input
     try:
-        inputInt = int(input(inputPrompt)) # prints 'inputPrompt' as the prompt for the input
+        inputInt = int(inputInt) # tries converting to an int
+        return inputInt
     except:
-        if inputInt == checkWord:
-            return inputInt
-        else:
+        if (checkWord is not None) and (str(inputInt).lower() == checkWord): # Check for inputInt.lower() to make the check case-insensitive.
+            print(inputInt, checkWord)
+            return checkWord # if the word is a particular one the task is looking for other than a number, returns that instead. If using this, should check for it before using inputInt as an int. This is a bit of an inelegant solution for anything beyond the scope of this assignment, but it seemed most efficient for keeping the scope small.
+        elif checkWord is not None:
+            print("b")
+            print("This input can't be converted to an integer. Please try again.")
+            takeInt(inputPrompt, checkWord) # runs again until a valid input is given
+        elif checkWord is None:
+            print("a")
             print("This input can't be converted to an integer. Please try again.")
             takeInt(inputPrompt) # runs again until a valid input is given
-    return inputInt
+
+def intOrKeyword(inputPrompt, keyWord):
+    inputValue = takeInt(inputPrompt, True)
+    if str(inputValue).lower() == keyWord: # Check for inputValue.lower() to make the check case-insensitive.
+        print(inputValue, keyWord)
+        return keyWord # if the word is a particular one the task is looking for other than a number, returns that instead. If using this, should check for it before using inputInt as an int. This is a bit of an inelegant solution for anything beyond the scope of this assignment, but it seemed most efficient for keeping the scope small.
+    else:
+        print("b")
+        print("This input can't be converted to an integer. Please try again.")
+        takeInt(inputPrompt, True) # runs again until a valid input is given
 
 def count():
     print("Counting numbers from 1 to 12.") # explaining the task about to be done, for the purpose of this assignment
-    for i in range(1, 13): # stops at 13, doesn't print it (but you knew that)
+    for i in range(1, 13): # stops at 13, doesn't print it
         print(i)
         i += 1
 
@@ -66,7 +82,8 @@ def n_numbers():
 
 def min_max():
     print("Taking input integers until user enters 'done', then printing the highest and lowest integers entered.")
-    n = takeInt("")
+    n = intOrKeyword("Input integers or type 'done': ", "done")
+    print(n)
 
 
 def main():
