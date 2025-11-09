@@ -1,30 +1,24 @@
-# I copied over takeInt from when I wrote it in project2_lab, with several changes.
-def takeInt(inputPrompt, keyWord = None):
-    inputInt = input(inputPrompt) # prints 'inputPrompt' as the prompt for the input
+# I copied over takeInt from when I wrote it in project2_lab, then made several changes.
+def takeInt(inputPrompt, keyWord = None): # optionally takes a keyWord to check for
+    inputStr = input(inputPrompt)
+    inputInt = None # inputInt remains None until a valid input is given
     try:
-        inputInt = int(inputInt) # tries converting to an int
-        return inputInt
+        inputInt = int(inputStr) # tries converting input to an int
     except:
-        if (keyWord != None) and (str(inputInt).lower() == keyWord): # Check for inputInt.lower() to make the check case-insensitive.
-            return keyWord # if the word is a particular one the task is looking for other than a number, returns that instead. If using this, should check for it before using inputInt as an int. This is a bit of an inelegant solution for anything beyond the scope of this assignment, but it seemed most efficient for keeping the scope small.
-        elif keyWord is not None:
-            print(f"This input can't be converted to an integer and isn't isn't keyword '{keyWord}'. Please try again.")
-            takeInt(inputPrompt, keyWord) # runs again until a valid input is given
+        if (keyWord is not None) and (str(inputStr).lower() == keyWord): # Check for inputInt.lower() to make the check case-insensitive.
+            return keyWord # if the word is a particular one the task is looking for other than a number, returns that instead. If using this, should check for it before using inputInt as an int.
+        elif (keyWord is not None):
+            print(f"This input can't be converted to an integer and isn't keyword '{keyWord}'. Please try again.")
+            while inputInt is None:
+                inputInt = takeInt(inputPrompt, keyWord) # runs again until a valid input is given
         else:
             print("This input can't be converted to an integer. Please try again.")
-            takeInt(inputPrompt) # runs again until a valid input is given
-
-def intOrKeyword(inputPrompt, keyWord): # this function was necessary in addition to takeInt so I could run takeInt recursively in case of repeated invalid inputs, but still ensure the function I ran in the task returned a valid value at the end. There was probably a better way to do this, I'll revisit it if I have time.
-    inputValue = None
-    while inputValue is None:
-        inputValue = takeInt(inputPrompt, keyWord)
-    if str(inputValue).lower() == keyWord: # I'd like to make these checks less redundant if I have time later
-        return keyWord
-    else:
-        return inputValue
+            while inputInt is None:
+                inputInt = takeInt(inputPrompt) # runs again until a valid input is given
+    return inputInt
 
 def count(): # Task 1
-    print("Counting numbers from 1 to 12.") # explaining the task about to be done, for the purpose of this assignment
+    print("Counting numbers from 1 to 12.") # explaining each task about to be done, for the purpose of this assignment
     for i in range(1, 13): # stops at 13, doesn't print it
         print(i)
         i += 1
@@ -86,7 +80,7 @@ def min_max(): # Task 6
     lowest = None
     while n != keyWord:
         prev_n = n # previously inputted value; will be 0 in the first run
-        n = intOrKeyword("Input integers or type 'done': ", keyWord)
+        n = takeInt("Input integers or type 'done': ", keyWord)
         if n != keyWord:
             numbers.append(n)
             if (lowest is not None) and (highest is not None):
@@ -114,6 +108,7 @@ def count_vowels(): # Task 7
     print(f"The word '{word}' contains {vowel_count} vowels.")
 
 def data_stats(): # Task 8
+    print("Giving information (count, sum, min, and max) about a list.")
     data = [12, 3, 7, 7, 20, -2, 0, 15, 15, 9]
     count = {}
     duplicates = {}
@@ -154,8 +149,44 @@ def data_stats(): # Task 8
                 lowest = n
             if highest is None: # if highest was previously undefined, this number becomes the new highest. this isn't an elif because at least the first number inputted will be both the lowest and the highest, so both of these should run
                 highest = n
-    print(f"Count: {count_msg}{non_dupes.keys()} {dupes_msg}", "Sum: {sum}, Min: {lowest}, Max: {highest}")
+    print(f"Count: {count_msg}{non_dupes.keys()} {dupes_msg}", "Sum: {sum}, Min: {lowest}, Max: {highest}") # fix the formatting here
 
+def guess_number(firstRun = True): # Task 9
+    if firstRun: # I don't need to display this on repeated runs
+        print("Letting the user try to guess a number.")
+    secret_number = 17
+    attempts = 5
+    right_guess = False
+    for i in range(attempts):
+        guess = takeInt("Input the number you'd like to guess: ")
+        if guess == secret_number:
+            print(f"Correct! The secret number is {secret_number}.")
+            right_guess = True
+            break
+        elif guess > secret_number:
+            print("Too high")
+        elif guess < secret_number:
+            print("Too low")
+    if right_guess == True:
+        print("Nice!", end = " ")
+    else:
+        print(f"You've run out of attempts to guess. The secret number was {secret_number}.")
+    play_again = input("Would you like to play again?: ")
+    if str(play_again).lower() == "yes" or "y":
+        guess_number(False)
+
+def ASCII_rectangle(): # Task 10
+    print("Takes width and height and prints an ASCII rectangle with the given dimensions.")
+    width = takeInt("Please enter rectangle width: ")
+    height = takeInt("Please enter rectangle height: ")
+    for i in range(height):
+        if i != 0:
+            print("", end="\n") # adds a newline for every new row (not including the first so it doesn't start with one)
+        for j in range(width):
+            if (i == 0 or i == height - 1) or (j == 0 or j == width - 1): # if at the beginning or end of the loop (first row or last row; top and bottom edges of the rectangle) or the beginning or end of the row (left and right edges)
+                print("#", end="")
+            else:
+                print(" ", end="") # empty space if not on an edge, so the rectangle is hollow
 
 def main():
     ''' count()
@@ -164,7 +195,10 @@ def main():
     mult_table()
     n_numbers()
     min_max()
-    count_vowels()'''
+    count_vowels()
+    data_stats()
+    guess_number()
+    ASCII_rectangle()'''
     data_stats()
 
 main()

@@ -1,11 +1,12 @@
 # I wanted to do a try-except block in case either of the number inputs aren't entered as an integer, and making a function for it seemed like the best and easiest way to do so.
 
 def takeInt(inputPrompt):
-    inputInt = 0 # initializing variable to return
+    inputInt = 0 # variable to return
     try:
         inputInt = int(input(inputPrompt))
     except:
         print("This input can't be converted to an integer. Please try again.")
+        print(inputInt)
         takeInt(inputPrompt) # runs again until a valid input is given
     return inputInt
 
