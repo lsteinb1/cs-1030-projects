@@ -1,3 +1,5 @@
+import random # for optional use in guess_number
+
 # I copied over takeInt from when I wrote it in project2_lab, then made several changes.
 def takeInt(inputPrompt, keyWord = None): # optionally takes a keyWord to check for
     inputStr = input(inputPrompt)
@@ -17,14 +19,32 @@ def takeInt(inputPrompt, keyWord = None): # optionally takes a keyWord to check 
                 inputInt = takeInt(inputPrompt) # runs again until a valid input is given
     return inputInt
 
+def check_extremes(n, prev_n, lowest, highest): # for use in min_max and data_stats
+    if (lowest is not None) and (highest is not None):
+        if n >= prev_n: # checking how high the number is
+            if n >= highest: # if >= the current highest number
+                highest = n
+        elif n <= prev_n: # checking how low the number is
+            if (n <= lowest):
+                lowest = n
+    else:
+        if lowest is None: # if lowest was previously undefined, this number becomes the new lowest
+            lowest = n
+        if highest is None: # if highest was previously undefined, this number becomes the new highest. this isn't an elif because at least the first number inputted will be both the lowest and the highest, so both of these should run
+            highest = n
+    return lowest, highest
+
 def count(): # Task 1
-    print("Counting numbers from 1 to 12.") # explaining each task about to be done, for the purpose of this assignment
+    print("--- Counting numbers from 1 to 12. ---") # explaining each task about to be done, for the purpose of this assignment
+    num = 0
+    i = 0
     for i in range(1, 13): # stops at 13, doesn't print it
-        print(i)
+        num = i
+        print(num)
         i += 1
 
 def accumulate(): # Task 2
-    print("Printing the sum of every integer from 1 and 200.")
+    print("--- Printing the sum of every integer from 1 and 200. ---")
     task2Sum = 0
     i = 1
     while i <= 200:
@@ -34,7 +54,7 @@ def accumulate(): # Task 2
     print(f"Sum 1...200 = {task2Sum}")
 
 def evens(): # Task 3
-    print("Printing every even number from 0 to 30.")
+    print("--- Printing every even number from 0 to 30. ---")
     i = 0
     even_num = 0
     for i in range(0, 31, 2):
@@ -45,12 +65,14 @@ def evens(): # Task 3
             print("and", even_num, end = ".\n")
 
 def mult_table(): # Task 4
+    print("--- Printing a multiplication table for a given integer. ---")
     k = takeInt("Input an integer: ") # input validation, converts to an int if possible
     i = 0
     for i in range(1, 11):
         print(f"{k} × {i} = ", k * i)
 
 def n_numbers(): # Task 5
+    print("--- Taking a user-determined amount of numbers, printing them, and printing their sum and average. ---")
     n = 1
     n = takeInt("How many numbers would you like to enter?: ") # input validation
     i = 0 # initializing for future for loop
@@ -72,7 +94,7 @@ def n_numbers(): # Task 5
     print(f"Sum: {num_sum}, Average: {num_avg}")
 
 def min_max(): # Task 6
-    print("Taking input integers until user enters 'done', then printing the highest and lowest integers entered.")
+    print("--- Taking input integers until user enters 'done', then printing the highest and lowest integers entered. ---")
     numbers = []
     n = 0
     keyWord = "done"
@@ -83,22 +105,13 @@ def min_max(): # Task 6
         n = takeInt("Input integers or type 'done': ", keyWord)
         if n != keyWord:
             numbers.append(n)
-            if (lowest is not None) and (highest is not None):
-                if n >= prev_n: # checking how high the number is
-                    if n >= highest: # if >= the current highest number
-                        highest = n
-                elif n <= prev_n: # checking how low the number is
-                    if (n <= lowest):
-                        lowest = n
-            else:
-                if lowest is None: # if lowest was previously undefined, this number becomes the new lowest
-                    lowest = n
-                if highest is None: # if highest was previously undefined, this number becomes the new highest. this isn't an elif because at least the first number inputted will be both the lowest and the highest, so both of these should run
-                    highest = n
+            extremes = check_extremes(n, prev_n, lowest, highest)
+            lowest = extremes[0]
+            highest = extremes[1]
     print(f"Highest number: {highest}, Lowest number: {lowest}")
 
 def count_vowels(): # Task 7
-    print("Counting the vowels (including a, e, i, o, and u) in an inputted word.")
+    print("--- Counting the vowels (including a, e, i, o, and u) in an inputted word. ---")
     word = input("Enter a word: ")
     vowels = ["a", "e", "i", "o", "u"]
     vowel_count = 0
@@ -108,53 +121,44 @@ def count_vowels(): # Task 7
     print(f"The word '{word}' contains {vowel_count} vowels.")
 
 def data_stats(): # Task 8
-    print("Giving information (count, sum, min, and max) about a list.")
+    print("--- Giving information (count, sum, min, and max) about a list. ---")
     data = [12, 3, 7, 7, 20, -2, 0, 15, 15, 9]
-    count = {}
+    count = {} # full count. Used to determine duplicates
     duplicates = {}
     non_dupes = {}
     sum = 0
     lowest = None
     highest = None
     n = 0
-    dupes_msg = ""
+    dupes_msg = "" # for formatting the message counting the duplicates
     count_msg = "There is one instance each of "
     for i in range(len(data)):
         prev_n = n
         n = data[i]
         sum += n
-        if n in count:
+        if n in count: # a duplicate number
             count[n] += 1
             non_dupes.pop(n)
+            count_msg = count_msg.replace(f"{n}, ", "")
             duplicates[n] = count[n]
             dupes_msg += f"There are {count[n]} instances of {n}. "
         else:
             count[n] = 1
             non_dupes[n] = count[n]
-            '''
             if i != len(data) - 1: # if not on last run
                 count_msg += f"{n}, "
             else:
                 count_msg += f"and {n}."
-            '''
-        if (lowest is not None) and (highest is not None): # these blocks copied from min_max. I would've preferred to make them a function to call in both related tasks, but I didn't realize that until later, so it'd be more complicated now. I'll do it if I have time.
-            if n >= prev_n: # checking how high the number is
-                if n >= highest: # if >= the current highest number
-                    highest = n
-            elif n <= prev_n: # checking how low the number is
-                if (n <= lowest):
-                    lowest = n
-        else:
-            if lowest is None: # if lowest was previously undefined, this number becomes the new lowest
-                lowest = n
-            if highest is None: # if highest was previously undefined, this number becomes the new highest. this isn't an elif because at least the first number inputted will be both the lowest and the highest, so both of these should run
-                highest = n
-    print(f"Count: {count_msg}{non_dupes.keys()} {dupes_msg}", "Sum: {sum}, Min: {lowest}, Max: {highest}") # fix the formatting here
+        extremes = check_extremes(n, prev_n, lowest, highest)
+        lowest = extremes[0]
+        highest = extremes[1]
+    print(f"Count: There are {len(data)} items in the data. {count_msg} {dupes_msg}", f"Sum: {sum}, Min: {lowest}, Max: {highest}")
 
-def guess_number(firstRun = True): # Task 9
-    if firstRun: # I don't need to display this on repeated runs
-        print("Letting the user try to guess a number.")
-    secret_number = 17
+def guess_number(first_run = True): # Task 9
+    num_range = [0, 30]
+    if first_run: # I don't need to display this on repeated runs
+        print(f"--- Letting the user try to guess a number between {num_range[0]} and {num_range[1]}. ---")
+    secret_number = random.randint(num_range[0], num_range[1]) # can also just set this to 17 for testing purposes
     attempts = 5
     right_guess = False
     for i in range(attempts):
@@ -172,11 +176,11 @@ def guess_number(firstRun = True): # Task 9
     else:
         print(f"You've run out of attempts to guess. The secret number was {secret_number}.")
     play_again = input("Would you like to play again?: ")
-    if str(play_again).lower() == "yes" or "y":
+    if (str(play_again).lower() == "yes") or (str(play_again).lower() == "y"):
         guess_number(False)
 
 def ASCII_rectangle(): # Task 10
-    print("Takes width and height and prints an ASCII rectangle with the given dimensions.")
+    print("--- Takes width and height and prints an ASCII rectangle with the given dimensions. ---")
     width = takeInt("Please enter rectangle width: ")
     height = takeInt("Please enter rectangle height: ")
     for i in range(height):
@@ -189,7 +193,7 @@ def ASCII_rectangle(): # Task 10
                 print(" ", end="") # empty space if not on an edge, so the rectangle is hollow
 
 def main():
-    ''' count()
+    count()
     accumulate()
     evens()
     mult_table()
@@ -198,7 +202,6 @@ def main():
     count_vowels()
     data_stats()
     guess_number()
-    ASCII_rectangle()'''
-    data_stats()
+    ASCII_rectangle()
 
 main()
