@@ -7,14 +7,14 @@ def takeInt(inputPrompt, keyWord = None, limit = None): # optionally takes a key
     else:
         try:
             inputInt = int(inputStr) # tries converting input to an int
-            if (type(limit) == range):
+            if (type(limit) == tuple): # I could also use a range here, in which case I'd need to use limit[-1] instead of limit[1] for the upper limit value.
                 if inputInt in limit:
                     pass
-                elif inputInt > limit[1]:
+                elif inputInt > limit[1]: # check upper limit
                     print(f"This input is above the range {limit[0]}-{limit[1]}. Please try again.")
                     while inputInt is None:
                         inputInt = takeInt(inputPrompt, keyWord) # runs again until a valid input is given
-                elif inputInt < limit[0]:
+                elif inputInt < limit[0]: # check lower limit
                     print(f"This input is below the range {limit[0]}-{limit[1]}. Please try again.")
                     while inputInt is None:
                         inputInt = takeInt(inputPrompt, keyWord) # runs again until a valid input is given
@@ -30,13 +30,27 @@ def takeInt(inputPrompt, keyWord = None, limit = None): # optionally takes a key
     return inputInt
 
 def min_coins():
-    change = takeInt("Please Enter Amount of Change (1-99) or ZERO to EXIT. ", 0, range(1,100))
     quarters = 0
     dimes = 0
     nickels = 0
     pennies = 0
+    change = takeInt("Please Enter Amount of Change (1-99) or ZERO to EXIT. ", 0, (1,99))
+    print("") # empty line as requested
     
-    print(change)
+    while change >= 25:
+        change -= 25
+        quarters += 1
+    while change >= 10:
+        change -= 10
+        dimes += 1
+    while change >= 5:
+        change -= 5
+        nickels += 1
+
+    pennies = change
+
+    print(f"Quarters: {quarters}, Dimes: {dimes}, Nickels: {nickels}, Pennies: {pennies}")
+    
 
 def main():
     min_coins()
