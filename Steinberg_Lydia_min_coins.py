@@ -12,10 +12,12 @@ def takeInt(inputPrompt, keyWord = None, limit = None): # optionally takes a key
                     pass
                 elif inputInt > limit[1]: # check upper limit
                     print(f"This input is above the range {limit[0]}-{limit[1]}. Please try again.")
+                    inputInt = None
                     while inputInt is None:
                         inputInt = takeInt(inputPrompt, keyWord) # runs again until a valid input is given
                 elif inputInt < limit[0]: # check lower limit
                     print(f"This input is below the range {limit[0]}-{limit[1]}. Please try again.")
+                    inputInt = None
                     while inputInt is None:
                         inputInt = takeInt(inputPrompt, keyWord) # runs again until a valid input is given
         except ValueError:
@@ -30,27 +32,30 @@ def takeInt(inputPrompt, keyWord = None, limit = None): # optionally takes a key
     return inputInt
 
 def min_coins():
-    quarters = 0
-    dimes = 0
-    nickels = 0
-    pennies = 0
-    change = takeInt("Please Enter Amount of Change (1-99) or ZERO to EXIT. ", 0, (1,99))
-    print("") # empty line as requested
-    
-    while change >= 25:
-        change -= 25
-        quarters += 1
-    while change >= 10:
-        change -= 10
-        dimes += 1
-    while change >= 5:
-        change -= 5
-        nickels += 1
+    keyWord = "0"
+    change = None
+    while change != keyWord:
+        quarters = 0
+        dimes = 0
+        nickels = 0
+        pennies = 0
+        change = takeInt("Please Enter Amount of Change (1-99) or ZERO to EXIT.\n\n>", keyWord, (1,99))
+        if change == keyWord:
+            break
+        else:
+            while change >= 25: # quarters
+                change -= 25
+                quarters += 1
+            while change >= 10: # dimes
+                change -= 10
+                dimes += 1
+            while change >= 5: # nickels
+                change -= 5
+                nickels += 1
 
-    pennies = change
+            pennies = change # pennies will be the remaining value in {change}
 
-    print(f"Quarters: {quarters}, Dimes: {dimes}, Nickels: {nickels}, Pennies: {pennies}")
-    
+            print(f"\nQuarters: {quarters}\nDimes: {dimes}\nNickels: {nickels}\nPennies: {pennies}\n")
 
 def main():
     min_coins()
