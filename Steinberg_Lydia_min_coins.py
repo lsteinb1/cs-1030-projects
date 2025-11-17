@@ -38,7 +38,7 @@ def min_coins():
     keyWord = "0"
     change = None
     limit = (1,99) # (minimum, maximum). I could've also written this program around this value being a range.
-    dollar_mode = False
+    dollar_mode = True # toggle for whether to let users input floats or numbers greater than 99, and whether to check for counts of dollars. Defaults to True for full functionality, but can easily be changed to False to test the output with the original assignment's scope.
     if dollar_mode:
         limit = (0,None) # can be any non-negative number (other than 0, which is the keyword)
     while change != keyWord:
