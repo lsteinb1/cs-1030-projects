@@ -67,12 +67,12 @@ def min_coins():
             cents = change
         else:
             change = takeNum("Please Enter Amount of Dollars and Change (1-99) or ZERO to EXIT.\n\n>", keyWord, limit, "float")
-            dollars = int(change)
-            cents = int(round((change - dollars) * 100)) # this needed to be rounded because, for some reason, it was counting 0.57 as 56.999. This calculation makes the number of cents into a whole number
         if change == keyWord:
             break
         else:
             if dollar_mode:
+                dollars = int(change)
+                cents = int(round((change - dollars) * 100)) # this needed to be rounded because, for some reason, it was counting 0.57 as 56.999. This calculation makes the number of cents into a whole number
                 while dollars >= 100: # hundreds
                     dollars -= 100 # subtract one hundred from amount of dollars
                     hundreds += 1 # increase the count of hundreds
