@@ -38,9 +38,9 @@ def min_coins():
     keyWord = "0"
     change = None
     limit = (1,99) # (minimum, maximum). I could've also written this program around this value being a range.
-    dollar_mode = True
+    dollar_mode = False
     if dollar_mode:
-        limit = (0,None)
+        limit = (0,None) # can be any non-negative number (other than 0, which is the keyword)
     while change != keyWord:
         hundreds = 0
         fifties = 0
@@ -53,34 +53,57 @@ def min_coins():
         nickels = 0
         pennies = 0
 
-        quarter_amount = 0.25
-        dime_amount = 0.10
-        nickel_amount = 0.05
-        penny_amount = 0.01
+        change = 0.0
+        dollars = 0
+        cents = 0
+
+        quarter_amount = 25
+        dime_amount = 10
+        nickel_amount = 5
+        penny_amount = 1
 
         if dollar_mode == False:
             change = takeNum("Please Enter Amount of Change (1-99) or ZERO to EXIT.\n\n>", keyWord, limit)
+            cents = change
         else:
             change = takeNum("Please Enter Amount of Dollars and Change (1-99) or ZERO to EXIT.\n\n>", keyWord, limit, "float")
-            print(change)
+            dollars = int(change)
+            cents = int(round((change - dollars) * 100)) # this needed to be rounded because, for some reason, it was counting 0.57 as 56.999. This calculation makes the number of cents into a whole number
         if change == keyWord:
             break
         else:
-            while change >= quarter_amount: # quarters
-                change -= quarter_amount # subtract the amount of a quarter from change
+            if dollar_mode:
+                while dollars >= 100: # hundreds
+                    dollars -= 100 # subtract one hundred from amount of dollars
+                    hundreds += 1 # increase the count of hundreds
+                while dollars >= 50:
+                    dollars -= 50
+                    fifties += 1
+                while dollars >= 20:
+                    dollars -= 20
+                    twenties += 1
+                while dollars >= 10:
+                    dollars -= 10
+                    tens += 1
+                while dollars >= 5:
+                    dollars -= 5
+                    fives += 1
+                while dollars >= 1:
+                    dollars -= 1
+                    ones += 1
+            while cents >= quarter_amount: # quarters
+                cents -= quarter_amount # subtract the amount of a quarter from change
                 quarters += 1 # increase the count of quarters
-                print(change)
-            while change >= dime_amount: # dimes
-                change -= dime_amount
+            while cents >= dime_amount: # dimes
+                cents -= dime_amount
                 dimes += 1
-                print(change)
-            while change >= nickel_amount: # nickels
-                change -= nickel_amount
+            while cents >= nickel_amount: # nickels
+                cents -= nickel_amount
                 nickels += 1
-                print(change)
 
-            pennies = change # pennies will be the remaining value in {change}
-
+            pennies = cents # pennies will be the remaining value in {change}
+            if dollar_mode:
+                print(f"\nHundreds: {hundreds}\nFifties: {fifties}\nTwenties: {twenties}\nTens: {tens}\nFives: {fives}\nOnes: {ones}", end="")
             print(f"\nQuarters: {quarters}\nDimes: {dimes}\nNickels: {nickels}\nPennies: {pennies}\n")
 
 def main():
